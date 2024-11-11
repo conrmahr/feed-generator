@@ -14,9 +14,15 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
-        // only tech-bluesky related posts
+        // no replies and english only
+        if (create.record.reply || !create.record.langs?.includes('en'))
+          return false
+
+        // filter off tech-bluesky keywords
+        const postArray = create.record.text.toLowerCase()
+
         return FEED_POST_TEXT.some((word) => {
-          create.record.text.toLowerCase().split(' ').includes(word)
+          postArray.includes(word)
         })
       })
       .map((create) => {
