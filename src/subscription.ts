@@ -15,9 +15,9 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToCreate = ops.posts.creates
       .filter((create) => {
         // only tech-bluesky related posts
-        return FEED_POST_TEXT.some((word) =>
-          create.record.text.toLowerCase().includes(word),
-        )
+        return FEED_POST_TEXT.some((word) => {
+          create.record.text.toLowerCase().split(' ').includes(word)
+        })
       })
       .map((create) => {
         // map tech-bluesky posts to a db row
