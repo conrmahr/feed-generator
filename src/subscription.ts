@@ -18,11 +18,16 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         if (create.record.reply || !create.record.langs?.includes('en'))
           return false
 
-        const findWordsInPosts = (text, wordsToFind) => {
-          return wordsToFind.some((word) => text.toLowerCase().includes(word))
+        const findHashTagsInPosts = (text, hashTags) => {
+          hashTags.some((word) => {
+            return text
+              .toLowerCase()
+              .split(' ')
+              .includes(`#${word.toLowerCase()}`)
+          })
         }
 
-        return findWordsInPosts(create.record.text, FEED_POST_TEXT)
+        return findHashTagsInPosts(create.record.text, FEED_POST_TEXT)
       })
       .map((create) => {
         // map tech-bluesky posts to a db row
