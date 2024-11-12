@@ -18,9 +18,11 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         if (create.record.reply || !create.record.langs?.includes('en'))
           return false
 
-        FEED_POST_TEXT.some((word) => {
-          return create.record.text.toLowerCase().includes(word)
-        })
+        const findWordsInPosts = (text, wordsToFind) => {
+          return wordsToFind.some((word) => text.toLowerCase().includes(word))
+        }
+
+        return findWordsInPosts(create.record.text, FEED_POST_TEXT)
       })
       .map((create) => {
         // map tech-bluesky posts to a db row
