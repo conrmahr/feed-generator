@@ -18,11 +18,8 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         if (create.record.reply || !create.record.langs?.includes('en'))
           return false
 
-        // filter off tech-bluesky keywords
-        const postArray = create.record.text.toLowerCase()
-
-        return FEED_POST_TEXT.some((word) => {
-          postArray.includes(word)
+        FEED_POST_TEXT.some((word) => {
+          return create.record.text.toLowerCase().includes(word)
         })
       })
       .map((create) => {
